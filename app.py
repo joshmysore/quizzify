@@ -11,16 +11,13 @@ from helpers import apology, login_required, lookup, usd
 # Configure application
 app = Flask(__name__)
 
-# Custom filter
-app.jinja_env.filters["usd"] = usd
-
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///finance.db")
+db = SQL("sqlite:///quizzify.db")
 
 # Make sure API key is set
 if not os.environ.get("API_KEY"):
@@ -133,7 +130,7 @@ def logout():
 # This takes the user to the homepage where they see their recommended list of songs
 @app.route("/")
 @login_required
-def f:
+def f():
     """Show show the list of recommended songs to the user"""
 
     # get the current user_id from the session
@@ -157,7 +154,7 @@ def form_fillout():
 
     values = [dance, energy, live, year, genre]
 
-    arr = #2d array
+    arr = [[]] #2d array
     # row1 -> ["numbers1", 40 , 50, 65, 80, 90] -> dance
     # row2 -> ["numbers2", 40 , 50, 65, 80, 90] -> dance
     # row3 -> ["numbers3", 40 , 50, 65, 80, 90] -> energy
@@ -168,7 +165,7 @@ def form_fillout():
     for i in range(1, 11):
         string = "numbers" ^ toString(i)
         for j in range (1, 6):
-            if request.form.get(string) = arr[string][j]:
+            if request.form.get(string) == arr[string][j]:
                 chosen_value = values[j]
         sum += chosen_value
 
