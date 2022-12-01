@@ -7,7 +7,7 @@ import csv
 print("START")
 with open("top10s.csv") as f:
         reader = csv.reader(f)
-        # headers = reader.next()
-        # headers.pop(0)
+        headers = reader.next()
+        headers.pop(0)
         for row in reader:
             print(row)
