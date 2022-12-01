@@ -1,0 +1,93 @@
+* { box-sizing: border-box; }
+@import url('https://fonts.googleapis.com/css?family=Rubik:400,500&display=swap');
+
+body {
+    background: linear-gradient(to right, #de48b5 0%,#0097ff 100%);
+    background-color: #fff;
+    font-family: 'Rubik', sans-serif;
+    text-align: center;
+}
+
+/* Styling the Form (Color, Padding, Shadow) */
+form {
+    background-color: #fff;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px 20px;
+    box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.form-control {
+    text-align: left;
+    margin-bottom: 25px;
+}
+
+/* Styling form-control Label */
+.form-control label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Styling form-control input,
+select, textarea */
+.form-control input,
+.form-control select,
+.form-control textarea {
+    border: 1px solid #777;
+    border-radius: 2px;
+    font-family: inherit;
+    padding: 10px;
+    display: block;
+    width: 95%;
+}
+
+/* Styling form-control Radio
+button and Checkbox */
+.form-control input[type="radio"],
+.form-control input[type="checkbox"] {
+    display: inline-block;
+    width: auto;
+}
+
+/* Styling Button */
+.button > button {
+    padding: 12px 10px;
+    border: 0;
+    background: linear-gradient(to right, #de48b5 0%,#0097ff 100%); 
+    border-radius: 3px;
+    margin-top: 10px;
+    color: #fff;
+    letter-spacing: 1px;
+    font-family: 'Rubik', sans-serif;
+  }
+  
+  .animation {
+    animation-name: move;
+    animation-duration: .4s;
+    animation-fill-mode: both;
+    animation-delay: 2s;
+  }
+  
+  .a1 {
+    animation-delay: 2s;
+  }
+  
+  .a2 {
+    animation-delay: 2.1s;
+  }
+  
+  .a3 {
+    animation-delay: 2.2s;
+  }
+  
+  .a4 {
+    animation-delay: 2.3s;
+  }
+  
+  .a5 {
+    animation-delay: 2.4s;
+  }
+  
+  .a6 {
+    animation-delay: 2.5s;
+  }
