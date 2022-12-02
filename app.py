@@ -112,8 +112,9 @@ def login():
             return apology("invalid username and/or password", 403)
 
         # Remember which user has logged in
-        session["user_id"] = rows[0]["id"]
-        print("test")
+        session["user_id"] = rows[0]["user_id"]
+        session["username"] = rows[0]["username"]
+        
 
         # Redirect user to home page
         return redirect("/")
@@ -142,7 +143,7 @@ def index():
     user_id = session["user_id"]
 
     # this executes some type of SQL query where it gets the names and song analytics of the new table we create
-    list = db.execute("SELECT title, artist, year, dance, energy, live, bpm FROM recs WHERE user_id = ? GROUP BY year", user_id)
+    # list = db.execute("SELECT title, artist, year, dance, energy, live, bpm FROM recs WHERE user_id = ? GROUP BY year", user_id)
     
     # list = db.execute("SELECT all the variables FROM newTable WHERE user_id = ? ORDER BY timestamp DESC LIMIT BY 1"  , user_id)
 
@@ -152,19 +153,20 @@ def index():
 
 
 # This takes the user to the homepage where they see their recommended list of songs
-@app.route("/form")
+@app.route("/form", methods=["GET", "POST"])
 @login_required
 def form_fillout():
     """Takes the user to the form in order to fill out and then uses that data to figure out the precise number for the 5 variables and insert into the SQL database"""
 
+    if request.method == "POST":
     # Step 1: Look up data from the form and conduct average calculations
-    dance = 0
-    energy = 0
-    live = 0
-    year = 0
-    bpm = 0
+        dance = 0
+        energy = 0
+        live = 0
+        year = 0
+        bpm = 0
 
-    values = [dance, energy, live, year, bpm]
+        values = [dance, energy, live, year, bpm]
 
     #2d array
     # row1 -> ["numbers1", 40 , 50, 65, 80, 90] -> dance
@@ -172,48 +174,50 @@ def form_fillout():
     # row3 -> ["numbers3", 40 , 50, 65, 80, 90] -> energy
     # row4 -> ["numbers4", 40 , 50, 65, 80, 90] -> energy
     # ... 
-    arr = [["numbers1", 40, 50, 65, 80, 90], ["numbers2", 40, 50, 65, 80, 90], ["numbers3", 50, 60, 75, 85, 90], ["numbers4", 50, 60, 75, 85, 90], ["numbers5", 6, 13, 20, 28, 38], ["numbers6", 6, 13, 20, 28, 38],  ["numbers7", 2011, 2013, 2015, 2017, 2019], ["numbers8", 2011, 2013, 2015, 2017, 2019], ["numbers9", 70, 100, 125, 155, 185], ["numbers10", 70, 100, 125, 155, 185]]
-    sum = 0
+        arr = [["numbers1", 40, 50, 65, 80, 90], ["numbers2", 40, 50, 65, 80, 90], ["numbers3", 50, 60, 75, 85, 90], ["numbers4", 50, 60, 75, 85, 90], ["numbers5", 6, 13, 20, 28, 38], ["numbers6", 6, 13, 20, 28, 38],  ["numbers7", 2011, 2013, 2015, 2017, 2019], ["numbers8", 2011, 2013, 2015, 2017, 2019], ["numbers9", 70, 100, 125, 155, 185], ["numbers10", 70, 100, 125, 155, 185]]
+        sum = 0
 
 
-    for i in range(1, 11):
-        string = "numbers" ^ tostring(i)
-        # CONDUCTS ERROR CHECKING FOR THE FORM ???
-        if not request.form.get(string)
-            return apology("must provide answers to all of the questions", 403)
-        for j in range (1, 6):
-            # continues the for loop 
-            if request.form.get(string) == arr[string][j]:
-                chosen_value = values[j]
-        sum += chosen_value
+        for i in range(1, 11):
+            string = "numbers" ^ tostring(i)
+            # CONDUCTS ERROR CHECKING FOR THE FORM ???
+            if not request.form.get(string):
+                return apology("must provide answers to all of the questions", 403)
+            for j in range (1, 6):
+                # continues the for loop 
+                if request.form.get(string) == arr[string][j]:
+                    chosen_value = values[j]
+            sum += chosen_value
 
-        # if we are at the end of another set of 2 questions
-        if i % 2 == 0:
-            values[i] = round(sum / 2)
-            sum = 0
+            # if we are at the end of another set of 2 questions
+            if i % 2 == 0:
+                values[i] = round(sum / 2)
+                sum = 0
 
-    # makes bounds in order to get range estimates 
-    boundDanceUpper = values[0] + 2
-    boundDanceLower = values[0] - 2
+        # makes bounds in order to get range estimates 
+        boundDanceUpper = values[0] + 2
+        boundDanceLower = values[0] - 2
 
-    boundEnergyUpper = values[1] + 2
-    boundEnergyLower = values[1] - 2
+        boundEnergyUpper = values[1] + 2
+        boundEnergyLower = values[1] - 2
 
-    boundLiveUpper = values[2] + 2
-    boundLiveLower = values[2] - 2
+        boundLiveUpper = values[2] + 2
+        boundLiveLower = values[2] - 2
 
-    boundYearUpper = values[3] + .5
-    boundYearLower = values[3] - .5
+        boundYearUpper = values[3] + .5
+        boundYearLower = values[3] - .5
 
-    boundBpmUpper = values[4] + 2
-    boundBpmLower = values[4] - 2
+        boundBpmUpper = values[4] + 2
+        boundBpmLower = values[4] - 2
 
-    # Step 2: Go though the SQL database to see which songs fit into the range from the 5 variables
+        # Step 2: Go though the SQL database to see which songs fit into the range from the 5 variables
 
-    result = db.execute("SELECT title FROM songs WHERE dance > ? AND dance < ? AND energy > ? AND energy < ? AND live > ? AND live < ? AND year > ? AND year < ? AND bpm > ? AND bpm < ?", boundDanceUpper, boundDanceLower, boundEnergyUpper, boundEnergyLower, boundLiveUpper, boundLiveLower, boundYearUpper, boundYearLower, boundBpmUpper, boundBpmLower)
-    for song in result: 
-        db.execute("INSERT INTO (title, artist, year, dance, energy, live, bpm) VALUES (?, ?, ?, ?, ?, ?, ?)", song[0], song[1])
+        result = db.execute("SELECT title FROM songs WHERE dance > ? AND dance < ? AND energy > ? AND energy < ? AND live > ? AND live < ? AND year > ? AND year < ? AND bpm > ? AND bpm < ?", boundDanceUpper, boundDanceLower, boundEnergyUpper, boundEnergyLower, boundLiveUpper, boundLiveLower, boundYearUpper, boundYearLower, boundBpmUpper, boundBpmLower)
+        for song in result: 
+            db.execute("INSERT INTO (title, artist, year, dance, energy, live, bpm) VALUES (?, ?, ?, ?, ?, ?, ?)", song[0], song[1])
 
 
-    # Step 3: Insert the songs into a table corresponding to the user_id
-    return redirect("/")
+        # Step 3: Insert the songs into a table corresponding to the user_id
+        return redirect("/")
+    else:
+        return render_template("form.html")
