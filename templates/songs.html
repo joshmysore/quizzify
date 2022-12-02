@@ -30,5 +30,45 @@
             </div>
             <div class="right"></div>
         </div>
+
+        <table>
+            <thead>
+              <tr>
+                <th>Songs</th>
+                <th>Artists</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for dict in list2 %}
+                <tr>
+                    <td>  {{ dict.title }}  </td>
+                    <td>  {{ dict.artist }}  </td>
+                    <td>  {{ dict.year }}  </td>
+                    <td>  {{ dict.dance }}  </td>
+                    <td>  {{ dict.energy }}  </td>
+                    <td>  {{ dict.live }}  </td>
+                    <td>  {{ dict.bpm }}  </td>
+                </tr>
+                {% endfor %}    
+            </tbody>
+        </table>
+        <table>
+            <thead>
+              <tr>
+                <th>All About You</th>
+                <th>Your Preferences</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>  {{ list1[0]["dance"]}}  </td>
+                    <td>  {{ list1[0]["energy"]}}  </td>
+                    <td>  {{ list1[0]["live"]}}  </td>
+                    <td>  {{ list1[0]["year"]}}  </td>
+                    <td>  {{ list1[0]["bpm"]}}  </td>
+                </tr>
+            </tbody>
+        </table>
+
     </body>
 </html>

@@ -225,7 +225,7 @@ def form_fillout():
         boundBpmUpper = values[4] + 2
         boundBpmLower = values[4] - 2
 
-        # Step 2: Go though the SQL database to see which songs fit into the range from the 5 variables
+        #  Step 2: Go though the SQL database to see which songs fit into the range from the 5 variables
 
         result = db.execute("SELECT id FROM songs WHERE dance > ? AND dance < ? AND energy > ? AND energy < ? AND live > ? AND live < ? AND year > ? AND year < ? AND bpm > ? AND bpm < ?", boundDanceUpper, boundDanceLower, boundEnergyUpper, boundEnergyLower, boundLiveUpper, boundLiveLower, boundYearUpper, boundYearLower, boundBpmUpper, boundBpmLower)
         
