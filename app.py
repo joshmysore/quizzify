@@ -193,20 +193,20 @@ def form_fillout():
         sum = 0
 
 
-        for i in range(1, 11):
-            string = "numbers" ^ tostring(i)
+        for i in range(1,11):
+            string = "numbers" + str(i)
             # CONDUCTS ERROR CHECKING FOR THE FORM ???
             if not request.form.get(string):
                 return apology("must provide answers to all of the questions", 403)
             for j in range (1, 6):
                 # continues the for loop. 
-                if request.form.get(string) == arr[string][j]:
-                    chosen_value = values[j]
-            sum += chosen_value
+                if int(request.form.get(string)) == j:
+                    chosen_value = arr[i - 1][j]
+                    sum += chosen_value
 
             # if we are at the end of another set of 2 questions
             if i % 2 == 0:
-                values[i] = round(sum / 2)
+                values[(i // 2) - 1] = round(sum / 2)
                 sum = 0
 
         # makes bounds in order to get range estimates 
@@ -227,7 +227,7 @@ def form_fillout():
 
         #  Step 2: Go though the SQL database to see which songs fit into the range from the 5 variables
 
-        result = db.execute("SELECT id FROM songs WHERE dance > ? AND dance < ? AND energy > ? AND energy < ? AND live > ? AND live < ? AND year > ? AND year < ? AND bpm > ? AND bpm < ?", boundDanceUpper, boundDanceLower, boundEnergyUpper, boundEnergyLower, boundLiveUpper, boundLiveLower, boundYearUpper, boundYearLower, boundBpmUpper, boundBpmLower)
+        result = db.execute("SELECT songid FROM songs WHERE dance > ? AND dance < ? AND energy > ? AND energy < ? AND live > ? AND live < ? AND year > ? AND year < ? AND bpm > ? AND bpm < ?", boundDanceUpper, boundDanceLower, boundEnergyUpper, boundEnergyLower, boundLiveUpper, boundLiveLower, boundYearUpper, boundYearLower, boundBpmUpper, boundBpmLower)
         
         db.execute("INSERT INTO recs (user_id, dance, energy, live, year, bpm) VALUES (?, ?, ?, ?, ?, ?)", user_id, values[0], values[1], values[2], values[3], values[4])
         rec_id = ("SELECT id FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", user_id)[0]["id"]
