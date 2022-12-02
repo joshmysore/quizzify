@@ -161,6 +161,8 @@ def display():
     
     list2 = db.execute("SELECT title, artist, dance, energy, live, year, bpm FROM songs WHERE songid IN (SELECT songsid FROM tables_id WHERE user_id = ? AND recs_id = ? )", user_id, recom_id)
 
+    print(list2)
+
     return render_template("songs.html", list1=list1, list2=list2)
 
 
@@ -210,30 +212,33 @@ def form_fillout():
                 sum = 0
 
         # makes bounds in order to get range estimates 
-        boundDanceUpper = values[0] + 2
-        boundDanceLower = values[0] - 2
+        boundDanceUpper = values[0] + 10
+        boundDanceLower = values[0] - 10
 
-        boundEnergyUpper = values[1] + 2
-        boundEnergyLower = values[1] - 2
+        boundEnergyUpper = values[1] + 10
+        boundEnergyLower = values[1] - 10
 
-        boundLiveUpper = values[2] + 2
-        boundLiveLower = values[2] - 2
+        boundLiveUpper = values[2] + 10
+        boundLiveLower = values[2] - 10
 
-        boundYearUpper = values[3] + .5
-        boundYearLower = values[3] - .5
+        boundYearUpper = values[3] + 10
+        boundYearLower = values[3] - 10
 
-        boundBpmUpper = values[4] + 2
-        boundBpmLower = values[4] - 2
+        boundBpmUpper = values[4] + 10
+        boundBpmLower = values[4] - 10
 
-        #  Step 2: Go though the SQL database to see which songs fit into the range from the 5 variables
+        # Step 2: Go though the SQL database to see which songs fit into the range from the 5 variables
+        # 
 
-        result = db.execute("SELECT songid FROM songs WHERE dance > ? AND dance < ? AND energy > ? AND energy < ? AND live > ? AND live < ? AND year > ? AND year < ? AND bpm > ? AND bpm < ?", boundDanceUpper, boundDanceLower, boundEnergyUpper, boundEnergyLower, boundLiveUpper, boundLiveLower, boundYearUpper, boundYearLower, boundBpmUpper, boundBpmLower)
+        result = db.execute("SELECT songid FROM songs WHERE dance < ? AND dance > ? AND energy < ? AND energy > ? AND live < ? AND live > ? AND year < ? AND year > ? AND bpm < ? AND bpm > ?", boundDanceUpper, boundDanceLower, boundEnergyUpper, boundEnergyLower, boundLiveUpper, boundLiveLower, boundYearUpper, boundYearLower, boundBpmUpper, boundBpmLower)
         
         db.execute("INSERT INTO recs (user_id, dance, energy, live, year, bpm) VALUES (?, ?, ?, ?, ?, ?)", user_id, values[0], values[1], values[2], values[3], values[4])
         rec_id = db.execute("SELECT id FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", user_id)[0]["id"]
 
+        print(result)
+
         for song in result: 
-            db.execute("INSERT INTO table_ids (user_id, songsid, recs_id) VALUES (?, ?, ?)", user_id, song["id"], rec_id)
+            db.execute("INSERT INTO tables_id (user_id, songsid, recs_id) VALUES (?, ?, ?)", user_id, song["songid"], rec_id)
             
         # Step 3: Insert the songs into a table corresponding to the user_id
         return redirect("/songs")
