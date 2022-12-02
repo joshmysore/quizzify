@@ -199,7 +199,7 @@ def form_fillout():
             if not request.form.get(string):
                 return apology("must provide answers to all of the questions", 403)
             for j in range (1, 6):
-                # continues the for loop 
+                # continues the for loop. 
                 if request.form.get(string) == arr[string][j]:
                     chosen_value = values[j]
             sum += chosen_value
