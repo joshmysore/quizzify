@@ -139,17 +139,30 @@ def logout():
 @login_required
 def index():
     """Show show the list of recommended songs to the user"""
+    
     # get the current user_id from the session
     user_id = session["user_id"]
 
-    # this executes some type of SQL query where it gets the names and song analytics of the new table we create
-    # list = db.execute("SELECT title, artist, year, dance, energy, live, bpm FROM recs WHERE user_id = ? GROUP BY year", user_id)
-    
-    # list = db.execute("SELECT all the variables FROM newTable WHERE user_id = ? ORDER BY timestamp DESC LIMIT BY 1"  , user_id)
-
     return render_template("user.html", username=session["username"])
 
-    # Step 3: print out the list somehow (refer to finance index)
+
+@app.route("/songs")
+@login_required
+def display():
+    """Show everything to the user"""
+
+    user_id = session["user_id"]
+    # this executes some type of SQL query where it gets the names and song analytics of the new table we create
+    
+    # list = db.execute("SELECT songs.title, songs.artist, recs.year, recs.dance, recs.energy, recs.live, recs.bpm FROM songs JOIN recs ON songs.recs_id = recs.id WHERE recs.user_id = ? ORDER BY timestamp DESC LIMIT BY 1" , user_id)
+    
+    list1 = db.execute("SELECT id, dance, energy, live, year, bpm FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", user_id)
+    recom_id = list1[0]["id"]
+    
+    list2 = db.execute("SELECT title, artist, dance, energy, live, year, bpm FROM songs WHERE id IN(SELECT songs_id FROM tables_id WHERE user_id = ? AND recs_id = ? ))", user_id, recom_id)
+
+    return render_template("songs.html", list1=list1, list2=list2)
+
 
 
 # This takes the user to the homepage where they see their recommended list of songs
@@ -157,6 +170,8 @@ def index():
 @login_required
 def form_fillout():
     """Takes the user to the form in order to fill out and then uses that data to figure out the precise number for the 5 variables and insert into the SQL database"""
+
+    user_id = session["user_id"]
 
     if request.method == "POST":
     # Step 1: Look up data from the form and conduct average calculations
@@ -212,12 +227,16 @@ def form_fillout():
 
         # Step 2: Go though the SQL database to see which songs fit into the range from the 5 variables
 
-        result = db.execute("SELECT title FROM songs WHERE dance > ? AND dance < ? AND energy > ? AND energy < ? AND live > ? AND live < ? AND year > ? AND year < ? AND bpm > ? AND bpm < ?", boundDanceUpper, boundDanceLower, boundEnergyUpper, boundEnergyLower, boundLiveUpper, boundLiveLower, boundYearUpper, boundYearLower, boundBpmUpper, boundBpmLower)
+        result = db.execute("SELECT id FROM songs WHERE dance > ? AND dance < ? AND energy > ? AND energy < ? AND live > ? AND live < ? AND year > ? AND year < ? AND bpm > ? AND bpm < ?", boundDanceUpper, boundDanceLower, boundEnergyUpper, boundEnergyLower, boundLiveUpper, boundLiveLower, boundYearUpper, boundYearLower, boundBpmUpper, boundBpmLower)
+        
+        db.execute("INSERT INTO recs (user_id, dance, energy, live, year, bpm) VALUES (?, ?, ?, ?, ?, ?)", user_id, values[0], values[1], values[2], values[3], values[4])
+        rec_id = ("SELECT id FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", user_id)[0]["id"]
+
         for song in result: 
-            db.execute("INSERT INTO (title, artist, year, dance, energy, live, bpm) VALUES (?, ?, ?, ?, ?, ?, ?)", song[0], song[1])
-
-
+            db.execute("INSERT INTO table_ids (user_id, songs_id, recs_id) VALUES (?, ?, ?)", user_id, song["id"], rec_id)
+            
         # Step 3: Insert the songs into a table corresponding to the user_id
         return redirect("/")
+    
     else:
         return render_template("form.html")
