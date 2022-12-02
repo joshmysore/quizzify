@@ -155,7 +155,7 @@ def index():
 @app.route("/form")
 @login_required
 def form_fillout():
-    """Takes the user to the form in order to fill out and then uses that data to figure out the precise number for the 5 variables and insert into the SQL database""""
+    """Takes the user to the form in order to fill out and then uses that data to figure out the precise number for the 5 variables and insert into the SQL database"""
 
     # Step 1: Look up data from the form and conduct average calculations
     dance = 0
