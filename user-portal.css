@@ -44,7 +44,7 @@ body {
   flex-direction: column;
   justify-content: center;
   animation-name: left;
-  animation-duration: .3s;
+  animation-duration: 1s;
   animation-fill-mode: both;
   animation-delay: 1s;
 }
@@ -52,7 +52,7 @@ body {
 .right {
   flex: 1;
   background-color: black;
-  transition: .01s;
+  transition: 1s;
   background-image: url(Surreal-Landscape.png);
   background-size: cover;
   background-repeat: no-repeat;
