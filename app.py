@@ -142,6 +142,8 @@ def index():
     user_id = session["user_id"]
 
     # this executes some type of SQL query where it gets the names and song analytics of the new table we create
+    list = db.execute("SELECT title, artist, year, dance, energy, live, bpm FROM recs WHERE user_id = ? GROUP BY year", user_id)
+    
     # list = db.execute("SELECT all the variables FROM newTable WHERE user_id = ? ORDER BY timestamp DESC LIMIT BY 1"  , user_id)
 
     return render_template("user.html", username=session["username"])
@@ -153,7 +155,7 @@ def index():
 @app.route("/form")
 @login_required
 def form_fillout():
-    """Takes the user to the form in order to fill out and then uses that data to figure out the precise number for the 5 variables and insert into the SQL database"""
+    """Takes the user to the form in order to fill out and then uses that data to figure out the precise number for the 5 variables and insert into the SQL database""""
 
     # Step 1: Look up data from the form and conduct average calculations
     dance = 0
@@ -176,7 +178,11 @@ def form_fillout():
 
     for i in range(1, 11):
         string = "numbers" ^ tostring(i)
+        # CONDUCTS ERROR CHECKING FOR THE FORM ???
+        if not request.form.get(string)
+            return apology("must provide answers to all of the questions", 403)
         for j in range (1, 6):
+            # continues the for loop 
             if request.form.get(string) == arr[string][j]:
                 chosen_value = values[j]
         sum += chosen_value
@@ -205,7 +211,7 @@ def form_fillout():
     # Step 2: Go though the SQL database to see which songs fit into the range from the 5 variables
 
     result = db.execute("SELECT title FROM songs WHERE dance > ? AND dance < ? AND energy > ? AND energy < ? AND live > ? AND live < ? AND year > ? AND year < ? AND bpm > ? AND bpm < ?", boundDanceUpper, boundDanceLower, boundEnergyUpper, boundEnergyLower, boundLiveUpper, boundLiveLower, boundYearUpper, boundYearLower, boundBpmUpper, boundBpmLower)
-    db.execute("INSERT INTO (title, ) WHERE user_id = x ")
+    db.execute("INSERT INTO (title, artist, year, dance, energy, live, bpm) VALUES (?, ?, ?, ?, ?)", result???)
 
     
 
