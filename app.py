@@ -133,14 +133,16 @@ def logout():
 # This takes the user to the homepage where they see their recommended list of songs
 @app.route("/")
 @login_required
-def f():
+def index():
     """Show show the list of recommended songs to the user"""
 
     # get the current user_id from the session
     user_id = session["user_id"]
 
     # this executes some type of SQL query where it gets the names and song analytics of the new table we create
-    list = db.execute()
+    list = db.execute(SELECT all the variables FROM newTable WHERE user_id = ? ORDER BY timestamp DESC LIMIT BY 1  , user_id)
+
+    return render_template("index.html", list=list)
 
     # Step 3: print out the list somehow (refer to finance index)
 
@@ -152,16 +154,21 @@ def form_fillout():
     """Takes the user to the form in order to fill out and then uses that data to figure out the precise number for the 5 variables and insert into the SQL database"""
 
     # Step 1: Look up data from the form and conduct average calculations
-    q1_dance = 0
-    q2_dance = 0
+    dance = 0
+    energy = 0
+    live = 0
+    year = 0
+    bpm = 0
 
-    values = [dance, energy, live, year, genre]
+    values = [dance, energy, live, year, bpm]
 
-    arr = [[]] #2d array
+    #2d array
     # row1 -> ["numbers1", 40 , 50, 65, 80, 90] -> dance
     # row2 -> ["numbers2", 40 , 50, 65, 80, 90] -> dance
     # row3 -> ["numbers3", 40 , 50, 65, 80, 90] -> energy
     # row4 -> ["numbers4", 40 , 50, 65, 80, 90] -> energy
+    # ... 
+    arr = [["numbers1", 40, 50, 65, 80, 90], ["numbers2", 40, 50, 65, 80, 90], ["numbers3", 50, 60, 75, 85, 90], ["numbers4", 50, 60, 75, 85, 90], ["numbers5", 6, 13, 20, 28, 38], ["numbers6", 6, 13, 20, 28, 38],  ["numbers7", 2011, 2013, 2015, 2017, 2019], ["numbers8", 2011, 2013, 2015, 2017, 2019], ["numbers9", 70, 100, 125, 155, 185], ["numbers10", 70, 100, 125, 155, 185]]
     sum = 0
 
 
@@ -174,15 +181,35 @@ def form_fillout():
 
         # if we are at the end of another set of 2 questions
         if i % 2 == 0:
-            values[i] = sum / 2
+            values[i] = round(sum / 2)
             sum = 0
 
+    # makes bounds in order to get range estimates 
+    boundDanceUpper = values[0] + 2
+    boundDanceLower = values[0] - 2
 
-    # Step 2: Parse through CSV/SQL database to see which songs fit into the range from the 5 variables
+    boundEnergyUpper = values[1] + 2
+    boundEnergyLower = values[1] - 2
 
-    result = db.execute("SELECT 'song_name' FROM 'table_name' WHERE '' ")
+    boundLiveUpper = values[2] + 2
+    boundLiveLower = values[2] - 2
+
+    boundYearUpper = values[3] + .5
+    boundYearLower = values[3] - .5
+
+    boundBpmUpper = values[4] + 2
+    boundBpmLower = values[4] - 2
+
+    # Step 2: Go though the SQL database to see which songs fit into the range from the 5 variables
+
+    result = db.execute("SELECT title FROM songs WHERE dance > ? AND dance < ? AND energy > ? AND energy < ? AND live > ? AND live < ? AND year > ? AND year < ? AND bpm > ? AND bpm < ?", boundDanceUpper, boundDanceLower, boundEnergyUpper, boundEnergyLower, boundLiveUpper, boundLiveLower, boundYearUpper, boundYearLower, boundBpmUpper, boundBpmLower)
+    db.execute("INSERT INTO x WHERE user_id = x ")
+
 
     # Step 3: Insert the songs into a table corresponding to the user_id
+    return redirect("/")
+
+
 
 
 
