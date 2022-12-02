@@ -37,13 +37,16 @@ def after_request(response):
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
-
-    username = request.form.get("username")
-    password = request.form.get("password")
-    confirmation = request.form.get("confirmation")
+    print("TEST")
 
     if request.method == "POST":
-
+        username = request.form.get("username")
+        print(username)
+        password = request.form.get("password")
+        print(password)
+        confirmation = request.form.get("confirmation")
+        print(confirmation)
+        print("POST")
         # checks of submitted username
         # could I combine these three for design?
         if not username:
@@ -61,6 +64,8 @@ def register():
         if password != confirmation:
             return apology("Your password does not match the confirmation of your password")
 
+        print("confirmation")
+
         # checks if username already exists
         if len(db.execute("SELECT username FROM users WHERE username = ?", username)) > 0:
             return apology("This username already exists. Please enter a unique username.")
@@ -70,7 +75,8 @@ def register():
 
         # log user in (getting this from the login route)
         rows = db.execute("SELECT * FROM users WHERE username = ?", username)
-        session["user_id"] = rows[0]["id"]
+        session["user_id"] = rows[0]["user_id"]
+        session["username"] = rows[0]["username"]
 
         # Redirect user to home page
         return redirect("/")
@@ -107,6 +113,7 @@ def login():
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
+        print("test")
 
         # Redirect user to home page
         return redirect("/")
@@ -131,14 +138,13 @@ def logout():
 @login_required
 def index():
     """Show show the list of recommended songs to the user"""
-
     # get the current user_id from the session
     user_id = session["user_id"]
 
     # this executes some type of SQL query where it gets the names and song analytics of the new table we create
-    list = db.execute("SELECT all the variables FROM newTable WHERE user_id = ? ORDER BY timestamp DESC LIMIT BY 1"  , user_id)
+    # list = db.execute("SELECT all the variables FROM newTable WHERE user_id = ? ORDER BY timestamp DESC LIMIT BY 1"  , user_id)
 
-    return render_template("index.html", list=list)
+    return render_template("user.html", username=session["username"])
 
     # Step 3: print out the list somehow (refer to finance index)
 
