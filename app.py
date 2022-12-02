@@ -159,7 +159,7 @@ def display():
     list1 = db.execute("SELECT id, dance, energy, live, year, bpm FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", user_id)
     recom_id = list1[0]["id"]
     
-    list2 = db.execute("SELECT title, artist, dance, energy, live, year, bpm FROM songs WHERE id IN (SELECT songs_id FROM tables_id WHERE user_id = ? AND recs_id = ? )", user_id, recom_id)
+    list2 = db.execute("SELECT title, artist, dance, energy, live, year, bpm FROM songs WHERE songid IN (SELECT songsid FROM tables_id WHERE user_id = ? AND recs_id = ? )", user_id, recom_id)
 
     return render_template("songs.html", list1=list1, list2=list2)
 
@@ -233,7 +233,7 @@ def form_fillout():
         rec_id = db.execute("SELECT id FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", user_id)[0]["id"]
 
         for song in result: 
-            db.execute("INSERT INTO table_ids (user_id, songs_id, recs_id) VALUES (?, ?, ?)", user_id, song["id"], rec_id)
+            db.execute("INSERT INTO table_ids (user_id, songsid, recs_id) VALUES (?, ?, ?)", user_id, song["id"], rec_id)
             
         # Step 3: Insert the songs into a table corresponding to the user_id
         return redirect("/songs")
