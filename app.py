@@ -22,10 +22,6 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///quizzify.db")
 
-# Make sure API key is set
-if not os.environ.get("API_KEY"):
-    raise RuntimeError("API_KEY not set")
-
 
 @app.after_request
 def after_request(response):
@@ -140,7 +136,7 @@ def index():
     user_id = session["user_id"]
 
     # this executes some type of SQL query where it gets the names and song analytics of the new table we create
-    list = db.execute(SELECT all the variables FROM newTable WHERE user_id = ? ORDER BY timestamp DESC LIMIT BY 1  , user_id)
+    list = db.execute("SELECT all the variables FROM newTable WHERE user_id = ? ORDER BY timestamp DESC LIMIT BY 1"  , user_id)
 
     return render_template("index.html", list=list)
 
