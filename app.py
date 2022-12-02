@@ -142,6 +142,8 @@ def f():
     # this executes some type of SQL query where it gets the names and song analytics of the new table we create
     list = db.execute()
 
+    db.execute
+
     # Step 3: print out the list somehow (refer to finance index)
 
 
@@ -179,16 +181,32 @@ def form_fillout():
 
         # if we are at the end of another set of 2 questions
         if i % 2 == 0:
-            values[i] = sum / 2
+            values[i] = round(sum / 2)
             sum = 0
+
+        boundDanceUpper = values[0] + 5
+        boundDanceLower = values[0] - 5
+
+        boundDanceUpper = values[0] + 5
+        boundDanceLower = values[0] - 5
+
+        boundDanceUpper = values[0] + 5
+        boundDanceLower = values[0] - 5
+
+        boundDanceUpper = values[0] + 5
+        boundDanceLower = values[0] - 5
+
+        boundDanceUpper = values[0] + 5
+        boundDanceLower = values[0] - 5
 
 
     # Step 2: Go though the SQL database to see which songs fit into the range from the 5 variables
 
-    result = db.execute("SELECT 'song_name' FROM 'table_name' WHERE '' ")
+    result = db.execute("SELECT title FROM songs WHERE dance > ? AND dance < ? AND energy > ? AND energy < ? AND live > ? AND live < ? AND year > ? AND year < ? AND bpm > ? AND bpm < ?", )
+
 
     # Step 3: Insert the songs into a table corresponding to the user_id
-
+    return redirect("/")
 
 
 
