@@ -132,7 +132,7 @@ def logout():
     session.clear()
 
     # Redirect user to login form
-    return redirect("/")
+    return redirect("/register")
 
 # This takes the user to the homepage where they see their recommended list of songs
 @app.route("/")
