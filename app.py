@@ -152,16 +152,21 @@ def form_fillout():
     """Takes the user to the form in order to fill out and then uses that data to figure out the precise number for the 5 variables and insert into the SQL database"""
 
     # Step 1: Look up data from the form and conduct average calculations
-    q1_dance = 0
-    q2_dance = 0
+    dance = 0
+    energy = 0
+    live = 0
+    year = 0
+    bpm = 0
 
-    values = [dance, energy, live, year, genre]
+    values = [dance, energy, live, year, bpm]
 
-    arr = [[]] #2d array
+    #2d array
     # row1 -> ["numbers1", 40 , 50, 65, 80, 90] -> dance
     # row2 -> ["numbers2", 40 , 50, 65, 80, 90] -> dance
     # row3 -> ["numbers3", 40 , 50, 65, 80, 90] -> energy
     # row4 -> ["numbers4", 40 , 50, 65, 80, 90] -> energy
+    # ... 
+    arr = ["numbers1", 40, 50, 65, 80, 90], ["numbers2", 40, 50, 65, 80, 90], ["numbers3", 50, 60, 75, 85, 90], ["numbers4", 50, 60, 75, 85, 90], ["numbers5", 6, 13, 20, 28, 38], ["numbers6", 6, 13, 20, 28, 38],  ["numbers7", 2011, 2013, 2015, 2017, 2019], ["numbers8", 2011, 2013, 2015, 2017, 2019], ["numbers9", 70, 100, 125, 155, 185], ["numbers10", 70, 100, 125, 155, 185]
     sum = 0
 
 
@@ -178,7 +183,7 @@ def form_fillout():
             sum = 0
 
 
-    # Step 2: Parse through CSV/SQL database to see which songs fit into the range from the 5 variables
+    # Step 2: Go though the SQL database to see which songs fit into the range from the 5 variables
 
     result = db.execute("SELECT 'song_name' FROM 'table_name' WHERE '' ")
 
