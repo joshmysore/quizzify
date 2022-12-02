@@ -175,8 +175,6 @@ def form_fillout():
             sum = 0
 
 
-
-
     # Step 2: Parse through CSV/SQL database to see which songs fit into the range from the 5 variables
 
     result = db.execute("SELECT 'song_name' FROM 'table_name' WHERE '' ")
