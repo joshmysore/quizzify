@@ -211,9 +211,9 @@ def form_fillout():
     # Step 2: Go though the SQL database to see which songs fit into the range from the 5 variables
 
     result = db.execute("SELECT title FROM songs WHERE dance > ? AND dance < ? AND energy > ? AND energy < ? AND live > ? AND live < ? AND year > ? AND year < ? AND bpm > ? AND bpm < ?", boundDanceUpper, boundDanceLower, boundEnergyUpper, boundEnergyLower, boundLiveUpper, boundLiveLower, boundYearUpper, boundYearLower, boundBpmUpper, boundBpmLower)
-    db.execute("INSERT INTO (title, artist, year, dance, energy, live, bpm) VALUES (?, ?, ?, ?, ?)", result???)
+    for song in result: 
+        db.execute("INSERT INTO (title, artist, year, dance, energy, live, bpm) VALUES (?, ?, ?, ?, ?, ?, ?)", song[0], song[1])
 
-    
 
     # Step 3: Insert the songs into a table corresponding to the user_id
     return redirect("/")
