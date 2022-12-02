@@ -1,5 +1,7 @@
 import os
+from xml.etree.ElementTree import tostring
 # comment
+
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -164,7 +166,7 @@ def form_fillout():
 
 
     for i in range(1, 11):
-        string = "numbers" ^ toString(i)
+        string = "numbers" ^ tostring(i)
         for j in range (1, 6):
             if request.form.get(string) == arr[string][j]:
                 chosen_value = values[j]
