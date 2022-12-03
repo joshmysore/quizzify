@@ -43,8 +43,9 @@ body {
 
 
 .left {
-  overflow: hidden;
-  padding-top: 1rem;
+  padding-top: 110px;
+  padding-left: 30px;
+  padding-right: 30px;
   justify-content: top;
   animation-name: left;
   animation-duration: 1s;
@@ -96,29 +97,16 @@ body {
   animation-delay: 2.5s;
 }
 
-@keyframes move {
-  0% {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-40px);
-  }
-
-  100% {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
+table {
+  counter-reset: rowNumber - 1;
 }
 
-@keyframes left {
-  0% {
-    opacity: 0;
-    width: 0;
-  }
+table tr {
+  counter-increment: rowNumber;
+}
 
-  100% {
-    opacity: 1;
-    padding: 20px 40px;
-    width: 440px;
-  }
+table tr td:first-child::before {
+  content: counter(rowNumber);
+  min-width: 1em;
+  margin-right: 0.5em;
 }
