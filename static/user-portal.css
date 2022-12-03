@@ -32,8 +32,8 @@ body {
   box-sizing: content-box;
   font-size: 1.5em;
   position: absolute;
-  top: 8px;
-  right: 16px;
+  bottom: 8px;
+  left: 16px;
   padding: 1rem;
   color: inherit;
   text-decoration: inherit;
