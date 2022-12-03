@@ -41,33 +41,16 @@ body {
     color: red;
 }
 
-.container {
-  display: flex;
-  height: 100vh;
-}
 
 .left {
   overflow: hidden;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  justify-content: center;
+  padding-top: 1rem;
+  justify-content: top;
   animation-name: left;
   animation-duration: 1s;
   animation-fill-mode: both;
   animation-delay: 1s;
 }
-
-.right {
-  flex: 1;
-  background-color: black;
-  transition: 1s;
-  background-image: url(Surreal-Landscape.png);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
 
 
 .header > h2 {
@@ -80,47 +63,6 @@ body {
   font-weight: normal;
   font-size: 15px;
   color: rgba(0,0,0,.4);
-}
-
-.form {
-  max-width: 80%;
-  display: flex;
-  flex-direction: column;
-}
-
-.form > p {
-  text-align: right;
-}
-
-.form > p > a {
-  color: #000;
-  font-size: 14px;
-}
-
-.form-field {
-  height: 46px;
-  padding: 0 16px;
-  border: 2px solid #ddd;
-  border-radius: 4px;
-  font-family: 'Rubik', sans-serif;
-  outline: 0;
-  transition: .2s;
-  margin-top: 20px;
-}
-
-.form-field:focus {
-  border-color: #0f7ef1;
-}
-
-.form > button {
-  padding: 12px 10px;
-  border: 0;
-  background: linear-gradient(to right, #de48b5 0%,#0097ff 100%); 
-  border-radius: 3px;
-  margin-top: 10px;
-  color: #fff;
-  letter-spacing: 1px;
-  font-family: 'Rubik', sans-serif;
 }
 
 .animation {
