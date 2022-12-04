@@ -1,6 +1,8 @@
 import os
 from xml.etree.ElementTree import tostring
 # comment
+import smtplib
+from email.message import EmailMessage
 
 
 from cs50 import SQL
@@ -162,13 +164,19 @@ def display():
     list2 = db.execute("SELECT title, artist, dance, energy, live, year, bpm FROM songs WHERE songid IN (SELECT songsid FROM tables_id WHERE user_id = ? AND recs_id = ? )", user_id, recom_id)
 
     statement = "" 
-
     if list2:
         statement = "Here are your songs."
     else: 
         statement = "Sorry, none of the songs in the database match your quiz results. That may mean your preferences suck :(" 
 
     return render_template("songs.html", list1=list1, list2=list2, statement=statement)
+
+
+@app.route("/email")
+@login_required
+def send_email():
+    """Send Email of User's results"""
+
 
 
 

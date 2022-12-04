@@ -5,8 +5,6 @@ from cs50 import SQL
 
 db = SQL("sqlite:///quizzify.db")
 
-# print(db.execute("SELECT * FROM Users;"))
-
 print("START")
 with open("top10s.csv") as f:
         reader = csv.reader(f)
