@@ -172,14 +172,6 @@ def display():
     return render_template("songs.html", list1=list1, list2=list2, statement=statement)
 
 
-@app.route("/email")
-@login_required
-def send_email():
-    """Send Email of User's results"""
-
-
-
-
 # This takes the user to the homepage where they see their recommended list of songs
 @app.route("/form", methods=["GET", "POST"])
 @login_required
@@ -258,3 +250,11 @@ def form_fillout():
     
     else:
         return render_template("form.html")
+
+
+
+@app.route("/email")
+@login_required
+def send_email():
+    """Send Email of User's results"""
+    
