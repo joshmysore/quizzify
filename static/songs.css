@@ -67,6 +67,13 @@ body {
   color: #4f46a5;
 }
 
+.header > h3 {
+  margin: 0;
+  font-weight: medium;
+  font-size: 25px;
+  color: #4f46a5;
+}
+
 .header > h4 {
   margin-top: 10px;
   font-weight: normal;
