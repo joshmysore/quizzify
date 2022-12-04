@@ -3,7 +3,10 @@
 
 
 body {
+  background: linear-gradient(to right, #de48b5 0%,#0097ff 100%);
+  background-color: #fff;
   font-family: 'Rubik', sans-serif;
+  text-align: center;
 }
 
 .custom-navbar {
@@ -47,6 +50,11 @@ body {
   padding-left: 30px;
   padding-right: 30px;
   justify-content: top;
+  background-color: #fff;
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 30px 20px;
+  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
   animation-name: left;
   animation-duration: 1s;
   animation-fill-mode: both;
@@ -109,4 +117,31 @@ table tr td:first-child::before {
   content: counter(rowNumber);
   min-width: 1em;
   margin-right: 0.5em;
+}
+
+@keyframes move {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-40px);
+  }
+
+  100% {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+@keyframes left {
+  0% {
+    opacity: 0;
+    width: 0;
+  }
+
+  100% {
+    opacity: 1;
+    padding: 20px 40px;
+    width: 800px;
+  }
 }
