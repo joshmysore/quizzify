@@ -264,7 +264,8 @@ def send_email():
 
     user_id = session["user_id"]
 
-    pdfkit.from_file('songs.html', 'results.pdf')
+    pdfkit.from_url('http://127.0.0.1:5000/songs', 'results.pdf')
+    
     # this gives the port needed for the gmail -- this is from the python article
     port = 465
     # this is from the video ???
