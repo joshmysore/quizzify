@@ -259,6 +259,9 @@ def form_fillout():
 def send_email():
     """Send Email of User's results"""
 
+    user_id = session["user_id"]
+
+
     pdfkit.from_file('songs.html', 'results.pdf')
     # this gives the port needed for the gmail -- this is from the python article
     port = 465
@@ -268,10 +271,14 @@ def send_email():
     EMAIL_ADDRESS = os.environ.get('EMAIL_USER')
     EMAIL_PASSWORD = os.environ.get('EMAIL_PASS')
 
+    # Get email from SQL query 
+    user_email = db.execute("SELECT email FROM users WHERE user_id = ?", user_id)
+
+    # Get msg 
     msg = EmailMessage()
     msg['Subject'] = 'Check out my results!'
     msg['From'] = EMAIL_ADDRESS
-    msg['To'] = 'sc2830059@gmail.com' 
+    msg['To'] = user_email
     msg.set_content('How about dinner at 6pm this Saturday')
 
     # lists for JPGs and PDFs
