@@ -149,32 +149,31 @@ def index():
     return render_template("user.html", username=session["username"])
 
 
-@app.route("/songs", methods=["GET", "POST"])
+@app.route("/songs", methods=["GET"])
 @login_required
 def display():
     """Show everything to the user"""
     
     user_id = session["user_id"]
 
-    if request.method == "POST":
-        # list = db.execute("SELECT songs.title, songs.artist, recs.year, recs.dance, recs.energy, recs.live, recs.bpm FROM songs JOIN recs ON songs.recs_id = recs.id WHERE recs.user_id = ? ORDER BY timestamp DESC LIMIT BY 1" , user_id)
-        
-        list1 = db.execute("SELECT id, dance, energy, live, year, bpm FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", user_id)
-        recom_id = list1[0]["id"]
-        
-        list2 = db.execute("SELECT title, artist, dance, energy, live, year, bpm FROM songs WHERE songid IN (SELECT songsid FROM tables_id WHERE user_id = ? AND recs_id = ? )", user_id, recom_id)
-
-        statement = "" 
-        if list2:
-            statement = "Here are your songs."
-        else: 
-            statement = "Sorry, none of the songs in the database match your quiz results. Retake for different results." 
-
-        return render_template("songs.html", list1=list1, list2=list2, statement=statement)
+    # list = db.execute("SELECT songs.title, songs.artist, recs.year, recs.dance, recs.energy, recs.live, recs.bpm FROM songs JOIN recs ON songs.recs_id = recs.id WHERE recs.user_id = ? ORDER BY timestamp DESC LIMIT BY 1" , user_id)
     
+    list1 = db.execute("SELECT id, dance, energy, live, year, bpm FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", user_id)
+    
+    if len(list1) == 0:
+        return apology2("You must fill out the form first in order to see any results", 403)
+    
+    recom_id = list1[0]["id"]   
+    
+    list2 = db.execute("SELECT title, artist, dance, energy, live, year, bpm FROM songs WHERE songid IN (SELECT songsid FROM tables_id WHERE user_id = ? AND recs_id = ? )", user_id, recom_id)
+
+    statement = "" 
+    if list2:
+        statement = "Here are your songs."
     else: 
-        if len(db.execute("SELECT * FROM tables_id WHERE user_id = ?", user_id)) == 0: 
-                return apology2("You must fill out the form first in order to see any results", 403)
+        statement = "Sorry, none of the songs in the database match your quiz results. Retake for different results." 
+
+    return render_template("songs.html", list1=list1, list2=list2, statement=statement)
 
 
 # This takes the user to the homepage where they see their recommended list of songs
@@ -246,8 +245,6 @@ def form_fillout():
         
         db.execute("INSERT INTO recs (user_id, dance, energy, live, year, bpm) VALUES (?, ?, ?, ?, ?, ?)", user_id, values[0], values[1], values[2], values[3], values[4])
         rec_id = db.execute("SELECT id FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", user_id)[0]["id"]
-
-        print(result)
 
         for song in result: 
             db.execute("INSERT INTO tables_id (user_id, songsid, recs_id) VALUES (?, ?, ?)", user_id, song["songid"], rec_id)
