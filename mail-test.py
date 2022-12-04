@@ -19,9 +19,9 @@ EMAIL_ADDRESS = os.environ.get('EMAIL_USER')
 EMAIL_PASSWORD = os.environ.get('EMAIL_PASS')
 
 msg = EmailMessage()
-msg['Subject'] = 'Grab dinner this weekend?'
+msg['Subject'] = 'Check out my results!'
 msg['From'] = EMAIL_ADDRESS
-msg['To'] = 'sc2830059@gmail.com'
+msg['To'] = 'sc2830059@gmail.com' 
 msg.set_content('How about dinner at 6pm this Saturday')
 
 # lists for JPGs and PDFs
