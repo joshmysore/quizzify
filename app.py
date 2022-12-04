@@ -146,6 +146,7 @@ def index():
     # get the current user_id from the session
     user_id = session["user_id"]
 
+
     return render_template("user.html", username=session["username"])
 
 
