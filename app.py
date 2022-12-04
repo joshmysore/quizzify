@@ -169,7 +169,7 @@ def display():
     if list2:
         statement = "Here are your songs."
     else: 
-        statement = "Sorry, none of the songs in the database match your quiz results. That may mean your preferences suck :(" 
+        statement = "Sorry, none of the songs in the database match your quiz results. Retake for different results." 
 
     return render_template("songs.html", list1=list1, list2=list2, statement=statement)
 
