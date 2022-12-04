@@ -12,7 +12,7 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required
+from helpers import apology, apology2, login_required
 
 # Configure application
 app = Flask(__name__)
@@ -146,32 +146,35 @@ def index():
     # get the current user_id from the session
     user_id = session["user_id"]
 
-
     return render_template("user.html", username=session["username"])
 
 
-@app.route("/songs")
+@app.route("/songs", methods=["GET", "POST"])
 @login_required
 def display():
     """Show everything to the user"""
-
+    
     user_id = session["user_id"]
-    # this executes some type of SQL query where it gets the names and song analytics of the new table we create
-    
-    # list = db.execute("SELECT songs.title, songs.artist, recs.year, recs.dance, recs.energy, recs.live, recs.bpm FROM songs JOIN recs ON songs.recs_id = recs.id WHERE recs.user_id = ? ORDER BY timestamp DESC LIMIT BY 1" , user_id)
-    
-    list1 = db.execute("SELECT id, dance, energy, live, year, bpm FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", user_id)
-    recom_id = list1[0]["id"]
-    
-    list2 = db.execute("SELECT title, artist, dance, energy, live, year, bpm FROM songs WHERE songid IN (SELECT songsid FROM tables_id WHERE user_id = ? AND recs_id = ? )", user_id, recom_id)
 
-    statement = "" 
-    if list2:
-        statement = "Here are your songs."
+    if request.method == "POST":
+        # list = db.execute("SELECT songs.title, songs.artist, recs.year, recs.dance, recs.energy, recs.live, recs.bpm FROM songs JOIN recs ON songs.recs_id = recs.id WHERE recs.user_id = ? ORDER BY timestamp DESC LIMIT BY 1" , user_id)
+        
+        list1 = db.execute("SELECT id, dance, energy, live, year, bpm FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", user_id)
+        recom_id = list1[0]["id"]
+        
+        list2 = db.execute("SELECT title, artist, dance, energy, live, year, bpm FROM songs WHERE songid IN (SELECT songsid FROM tables_id WHERE user_id = ? AND recs_id = ? )", user_id, recom_id)
+
+        statement = "" 
+        if list2:
+            statement = "Here are your songs."
+        else: 
+            statement = "Sorry, none of the songs in the database match your quiz results. Retake for different results." 
+
+        return render_template("songs.html", list1=list1, list2=list2, statement=statement)
+    
     else: 
-        statement = "Sorry, none of the songs in the database match your quiz results. Retake for different results." 
-
-    return render_template("songs.html", list1=list1, list2=list2, statement=statement)
+        if len(db.execute("SELECT * FROM tables_id WHERE user_id = ?", user_id)) == 0: 
+                return apology2("You must fill out the form first in order to see any results", 403)
 
 
 # This takes the user to the homepage where they see their recommended list of songs
@@ -181,9 +184,11 @@ def form_fillout():
     """Takes the user to the form in order to fill out and then uses that data to figure out the precise number for the 5 variables and insert into the SQL database"""
 
     user_id = session["user_id"]
-
+    
     if request.method == "POST":
-    # Step 1: Look up data from the form and conduct average calculations
+        
+        
+        # Step 1: Look up data from the form and conduct average calculations
         dance = 0
         energy = 0
         live = 0
@@ -192,12 +197,12 @@ def form_fillout():
 
         values = [dance, energy, live, year, bpm]
 
-    #2d array
-    # row1 -> ["numbers1", 40 , 50, 65, 80, 90] -> dance
-    # row2 -> ["numbers2", 40 , 50, 65, 80, 90] -> dance
-    # row3 -> ["numbers3", 40 , 50, 65, 80, 90] -> energy
-    # row4 -> ["numbers4", 40 , 50, 65, 80, 90] -> energy
-    # ... 
+        #2d array
+        # row1 -> ["numbers1", 40 , 50, 65, 80, 90] -> dance
+        # row2 -> ["numbers2", 40 , 50, 65, 80, 90] -> dance
+        # row3 -> ["numbers3", 40 , 50, 65, 80, 90] -> energy
+        # row4 -> ["numbers4", 40 , 50, 65, 80, 90] -> energy
+        # ... 
         arr = [["numbers1", 40, 50, 65, 80, 90], ["numbers2", 40, 50, 65, 80, 90], ["numbers3", 50, 60, 75, 85, 90], ["numbers4", 50, 60, 75, 85, 90], ["numbers5", 6, 13, 20, 28, 38], ["numbers6", 6, 13, 20, 28, 38],  ["numbers7", 2011, 2013, 2015, 2017, 2019], ["numbers8", 2011, 2013, 2015, 2017, 2019], ["numbers9", 70, 100, 125, 155, 185], ["numbers10", 70, 100, 125, 155, 185]]
         sum = 0
 
