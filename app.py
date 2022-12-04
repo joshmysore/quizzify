@@ -261,7 +261,6 @@ def send_email():
 
     user_id = session["user_id"]
 
-
     pdfkit.from_file('songs.html', 'results.pdf')
     # this gives the port needed for the gmail -- this is from the python article
     port = 465
@@ -276,10 +275,10 @@ def send_email():
 
     # Get msg 
     msg = EmailMessage()
-    msg['Subject'] = 'Check out my results!'
+    msg['Subject'] = 'Check out your results!'
     msg['From'] = EMAIL_ADDRESS
     msg['To'] = user_email
-    msg.set_content('How about dinner at 6pm this Saturday')
+    msg.set_content('Thank you for checking out Quizzify! Attatched below are a couple of pictures we wanted to include for you as well as a PDF of your results')
 
     # lists for JPGs and PDFs
     files = ['creators.jpg', 'city.jpg']
@@ -321,4 +320,5 @@ def send_email():
             # send the email and the message
             smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
             smtp.send_message(msg)
-    
+
+    return redirect("/")
