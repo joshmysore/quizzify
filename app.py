@@ -37,11 +37,16 @@ def after_request(response):
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
+    print("TEST")
 
     if request.method == "POST":
         username = request.form.get("username")
+        print(username)
         password = request.form.get("password")
+        print(password)
         confirmation = request.form.get("confirmation")
+        print(confirmation)
+        print("POST")
         # checks of submitted username
         # could I combine these three for design?
         if not username:
@@ -58,6 +63,8 @@ def register():
         # checks if password and confirmation match
         if password != confirmation:
             return apology("Your password does not match the confirmation of your password")
+
+        print("confirmation")
 
         # checks if username already exists
         if len(db.execute("SELECT username FROM users WHERE username = ?", username)) > 0:
@@ -154,7 +161,14 @@ def display():
     
     list2 = db.execute("SELECT title, artist, dance, energy, live, year, bpm FROM songs WHERE songid IN (SELECT songsid FROM tables_id WHERE user_id = ? AND recs_id = ? )", user_id, recom_id)
 
-    return render_template("songs.html", list1=list1, list2=list2)
+    statement = "" 
+
+    if list2:
+        statement = "Here are your songs."
+    else: 
+        statement = "Sorry, none of the songs in the database match your quiz results. That may mean your preferences suck :(" 
+
+    return render_template("songs.html", list1=list1, list2=list2, statement=statement)
 
 
 
@@ -225,6 +239,8 @@ def form_fillout():
         
         db.execute("INSERT INTO recs (user_id, dance, energy, live, year, bpm) VALUES (?, ?, ?, ?, ?, ?)", user_id, values[0], values[1], values[2], values[3], values[4])
         rec_id = db.execute("SELECT id FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", user_id)[0]["id"]
+
+        print(result)
 
         for song in result: 
             db.execute("INSERT INTO tables_id (user_id, songsid, recs_id) VALUES (?, ?, ?)", user_id, song["songid"], rec_id)
