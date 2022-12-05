@@ -24,28 +24,22 @@ body {
 }
 
 .company-name {
-    box-sizing: content-box;
-    font-size: 1.5em;
-    color: inherit;
-    text-decoration: inherit;
-    
-}
-
-.logout-click {
+  /* Naming convention */
   box-sizing: content-box;
   font-size: 1.5em;
-  text-align: right;
-  padding: 1rem;
   color: inherit;
   text-decoration: inherit;
 }
 
+
 .company-name:hover {
-    color: white;
+  /* Hover color */
+  color: white;
 }
 
 
 .left {
+ /* Modified content for the left filed, adding the form contents give a proper box for the songs page */
   padding-top: 110px;
   padding-left: 30px;
   padding-right: 30px;
