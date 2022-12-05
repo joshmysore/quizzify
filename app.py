@@ -251,6 +251,15 @@ def form_fillout():
     else:
         return render_template("form.html")
 
+@app.route("/friends", methods=["GET", "POST"])
+@login_required
+def find_friends():
+    """Send Email of User's results"""
+    
+    user_id = session["user_id"]
+
+    
+
 
 
 @app.route("/email")

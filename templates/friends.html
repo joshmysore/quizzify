@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content=
+		"width=device-width, initial-scale=1.0">
+	<title>
+		Friend Search
+	</title>
+    <link href="static/form.css" rel="stylesheet">
+</head>
+
+<body>
+    <h1 class="animation a0">Friend Search</h1>
+    <h2 class="animation a0">Submit the username of one of the friends you know on that has created an account to view their songs.</h2>
+
+	<!-- Create Form -->
+	<form action="/form" method="POST" id="form">
+        <div class="left animation a1 form-control">
+                <label for="numbers1" >Do you like to dance?</label>
+                <select id="numbers1" name="numbers1">
+                    <option value="1">1 - not at all</option>
+                    <option value="2">2 - rarely</option>
+                    <option value="3">3 - sometimes</option>
+                    <option value="4">4 - often</option>
+                    <option value="5">5 - all the time</option>
+                </select>
+		</div>
+
+        <div class="section">
+            <h2>Part 2: Free Response</h2>
+            <hr>
+            <!-- TODO: Add free response question here -->
+            <h3> What country's capital is "Bern"? </h3>
+            <input type="text"></input>
+            <button id="check">Check Answer</button>
+            <p class="resultant"></p>
+        </div>
+
+		<!-- Multi-line Text Input Control -->
+		<div class="button">
+            <button type="submit" class="button animation a6">SUBMIT</button>
+        </div>
+	</form>
+</body>
+
+</html>
