@@ -269,14 +269,14 @@ def find_friends():
 
         # Ensure username exists and password is correct
         if len(rows) != 1:
-            return apology("The username you have inputted does not match with anyone who has registered for Quizzify", 403)
+            return apology2("The username you have inputed does not match with anyone who has registered for Quizzify", 403)
         
         new_id = db.execute("SELECT user_id FROM users WHERE username = ?", username)
 
         list1 = db.execute("SELECT id, dance, energy, live, year, bpm FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", new_id)
 
         if len(list1) == 0:
-            return apology("Sorry, but it seems like your friend hasn't filled out a form yet. This means you can't see any results.", 403)
+            return apology2("Sorry, but it seems like your friend hasn't filled out a form yet. This means you can't see any results.", 403)
         
         recom_id = list1[0]["id"]   
         
