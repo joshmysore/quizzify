@@ -251,14 +251,52 @@ def form_fillout():
     else:
         return render_template("form.html")
 
+
 @app.route("/friends", methods=["GET", "POST"])
 @login_required
 def find_friends():
     """Send Email of User's results"""
     
-    user_id = session["user_id"]
 
-    
+    if request.method == "POST":
+        
+        username = request.form.get("username"):
+
+        if not username:
+            return apology("must provide username", 403)
+        
+        # Query database for username
+        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+
+        # Ensure username exists and password is correct
+        if len(rows) != 1:
+            return apology("The username you have inputted does not match with anyone who has registered for Quizzify", 403)
+        
+        new_id = db.execute("SELECT user_id FROM users WHERE username = ?", username)
+
+        list1 = db.execute("SELECT id, dance, energy, live, year, bpm FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", new_id)
+
+        if len(list1) == 0:
+            return apology2("Sorry, but it seems like your friend hasn't filled out a form yet. This means you can't see any results.", 403)
+        
+        recom_id = list1[0]["id"]   
+        
+        list2 = db.execute("SELECT title, artist, dance, energy, live, year, bpm FROM songs WHERE songid IN (SELECT songsid FROM tables_id WHERE user_id = ? AND recs_id = ? )", new_id, recom_id)
+
+        statement = "" 
+        if list2:
+            statement = "Here are your friend's songs."
+        else: 
+            statement = "Sorry, none of the songs in the database matched your friend's most recent quiz results." 
+
+        return render_template("songs2.html", list1=list1, list2=list2, statement=statement, username=username)
+            
+    else: 
+        return render_template("friends.html")
+
+
+
+
 
 
 
