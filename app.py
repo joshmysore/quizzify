@@ -141,10 +141,7 @@ def logout():
 @app.route("/")
 @login_required
 def index():
-    """Show show the list of recommended songs to the user"""
-    
-    # get the current user_id from the session
-    user_id = session["user_id"]
+    """Show the list of recommended songs to the user"""
 
     return render_template("user.html", username=session["username"])
 
@@ -155,8 +152,6 @@ def display():
     """Show everything to the user"""
     
     user_id = session["user_id"]
-
-    # list = db.execute("SELECT songs.title, songs.artist, recs.year, recs.dance, recs.energy, recs.live, recs.bpm FROM songs JOIN recs ON songs.recs_id = recs.id WHERE recs.user_id = ? ORDER BY timestamp DESC LIMIT BY 1" , user_id)
     
     list1 = db.execute("SELECT id, dance, energy, live, year, bpm FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", user_id)
     
@@ -210,7 +205,7 @@ def form_fillout():
             string = "numbers" + str(i)
             # CONDUCTS ERROR CHECKING FOR THE FORM ???
             if not request.form.get(string):
-                return apology("must provide answers to all of the questions", 403)
+                return apology2("must provide answers to all of the questions", 403)
             for j in range (1, 6):
                 # continues the for loop. 
                 if int(request.form.get(string)) == j:
@@ -232,8 +227,8 @@ def form_fillout():
         boundLiveUpper = values[2] + 10
         boundLiveLower = values[2] - 10
 
-        boundYearUpper = values[3] + 10
-        boundYearLower = values[3] - 10
+        boundYearUpper = values[3] + 2
+        boundYearLower = values[3] - 2
 
         boundBpmUpper = values[4] + 10
         boundBpmLower = values[4] - 10
@@ -244,6 +239,7 @@ def form_fillout():
         result = db.execute("SELECT songid FROM songs WHERE dance < ? AND dance > ? AND energy < ? AND energy > ? AND live < ? AND live > ? AND year < ? AND year > ? AND bpm < ? AND bpm > ?", boundDanceUpper, boundDanceLower, boundEnergyUpper, boundEnergyLower, boundLiveUpper, boundLiveLower, boundYearUpper, boundYearLower, boundBpmUpper, boundBpmLower)
         
         db.execute("INSERT INTO recs (user_id, dance, energy, live, year, bpm) VALUES (?, ?, ?, ?, ?, ?)", user_id, values[0], values[1], values[2], values[3], values[4])
+        
         rec_id = db.execute("SELECT id FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", user_id)[0]["id"]
 
         for song in result: 
@@ -265,7 +261,7 @@ def send_email():
     user_id = session["user_id"]
 
     pdfkit.from_url('http://127.0.0.1:5000/songs', 'results.pdf')
-    
+
     # this gives the port needed for the gmail -- this is from the python article
     port = 465
     # this is from the video ???

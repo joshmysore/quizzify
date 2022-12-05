@@ -79,15 +79,6 @@ body {
   flex-direction: column;
 }
 
-.form > p {
-  text-align: right;
-}
-
-.form > p > a {
-  color: #000;
-  font-size: 14px;
-}
-
 .form-field {
   height: 46px;
   padding: 0 16px;

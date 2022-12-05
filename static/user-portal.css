@@ -28,17 +28,6 @@ body {
     
 }
 
-.logout-click {
-  box-sizing: content-box;
-  font-size: 1.5em;
-  position: absolute;
-  bottom: 8px;
-  left: 16px;
-  padding: 1rem;
-  color: inherit;
-  text-decoration: inherit;
-}
-
 .company-name:hover {
     color: red;
 }
