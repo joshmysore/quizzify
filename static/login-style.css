@@ -7,37 +7,41 @@ body {
 }
 
 .custom-navbar {
-    /* Position */
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 100;
+  /* Position */
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 100;
 
-    /* Contents */
-    display: flex;
-    flex-direction: row;
-    justify-content: start;
-    padding: 1rem;
+  /* Contents */
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  padding: 1rem;
 }
 
 .company-name {
-    box-sizing: content-box;
-    font-size: 1.5em;
-    color: inherit;
-    text-decoration: inherit;
+  /* Naming convention */
+  box-sizing: content-box;
+  font-size: 1.5em;
+  color: inherit;
+  text-decoration: inherit;
     
 }
 
 .company-name:hover {
+    /* Hover color */
     color: red;
 }
 
 .container {
+  /* Main container */
   display: flex;
   height: 100vh;
 }
 
 .left {
+  /* Left side contents, featuring center text, flex-wrap, and animations */
   overflow: hidden;
   display: flex;
   flex-wrap: wrap;
@@ -50,6 +54,7 @@ body {
 }
 
 .right {
+  /* Right side contents, featuring a photo and a transition */
   flex: 1;
   background-color: black;
   transition: 1s;
@@ -60,7 +65,7 @@ body {
 }
 
 
-
+/* All text styles */
 .header > h2 {
   margin: 0;
   color: #4f46a5;
@@ -73,6 +78,7 @@ body {
   color: rgba(0,0,0,.4);
 }
 
+/* Form contents and design tweaks */
 .form {
   max-width: 80%;
   display: flex;
@@ -91,10 +97,12 @@ body {
 }
 
 .form-field:focus {
+  /* Form border color */
   border-color: #0f7ef1;
 }
 
 .form .button{
+  /* Form button style */
   padding: 12px 10px;
   border: 0;
   background: linear-gradient(to right, #de48b5 0%,#0097ff 100%); 
@@ -108,12 +116,14 @@ body {
 }
 
 .animation {
+  /* Animation description */
   animation-name: move;
   animation-duration: .4s;
   animation-fill-mode: both;
   animation-delay: 2s;
 }
 
+/* Staggered animation delays for aesthetic effect */
 .a1 {
   animation-delay: 2s;
 }
@@ -138,6 +148,7 @@ body {
   animation-delay: 2.5s;
 }
 
+/* Keyframes manipulation for animations */
 @keyframes move {
   0% {
     opacity: 0;
