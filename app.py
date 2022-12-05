@@ -257,10 +257,9 @@ def form_fillout():
 def find_friends():
     """Send Email of User's results"""
     
-
     if request.method == "POST":
         
-        username = request.form.get("username"):
+        username = request.form.get("username")
 
         if not username:
             return apology("must provide username", 403)
@@ -277,7 +276,7 @@ def find_friends():
         list1 = db.execute("SELECT id, dance, energy, live, year, bpm FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", new_id)
 
         if len(list1) == 0:
-            return apology2("Sorry, but it seems like your friend hasn't filled out a form yet. This means you can't see any results.", 403)
+            return apology("Sorry, but it seems like your friend hasn't filled out a form yet. This means you can't see any results.", 403)
         
         recom_id = list1[0]["id"]   
         
