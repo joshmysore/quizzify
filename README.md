@@ -33,4 +33,6 @@ The backend process began with the baseline from finance. But we generated all t
 
 For starters, we have four crucial tables: users, songs, recs, and tables_id. The users table stores all the information from “/register” so that a user database exists. Then, the songs tables store all the parsed information from our .csv files. This parsing is completed by a python script “database.py” that goes through the .csv file and runs a db.execute and inserts all the information we need from the .csv file into the songs table. Then, the recs table stores all the recommended songs following “app.py” computing the form’s values. Finally, “tables_id” exists so that a nested select works. These tables form the basis of our backend. The great thing about this design is that any .csv file can be parsed through and used so long as the table has Spotify’s metrics. As such, our code is modular in design, allowing for other lists to be used as long as Spotify’s data is present.
 
+The main features include: registering; loggining in; completing the form and getting song recommendations; seeing one's own previous results; and being able to search up friends' usernames and find their results.
+
 Then, we have two python files: app.py and database.py. These run the application and the parsing of data. These files are explained in design.md.

@@ -1,11 +1,13 @@
+/* Box sizing and url import for font */
 * { box-sizing: border-box; }
 @import url('https://fonts.googleapis.com/css?family=Rubik:400,500&display=swap');
 
+/* Body font and colors */
 body {
-    background: linear-gradient(to right, #de48b5 0%,#0097ff 100%);
-    background-color: #fff;
-    font-family: 'Rubik', sans-serif;
-    text-align: center;
+  background: linear-gradient(to right, #de48b5 0%,#0097ff 100%);
+  background-color: #fff;
+  font-family: 'Rubik', sans-serif;
+  text-align: center;
 }
 
 /* Styling the Form (Color, Padding, Shadow) */
@@ -28,8 +30,7 @@ form {
     margin-bottom: 10px;
 }
 
-/* Styling form-control input,
-select, textarea */
+/* Styling form-control input, select, textarea */
 .form-control input,
 .form-control select,
 .form-control textarea {
@@ -41,8 +42,7 @@ select, textarea */
     width: 95%;
 }
 
-/* Styling form-control Radio
-button and Checkbox */
+/* Styling form-control Radiobutton and Checkbox */
 .form-control input[type="radio"],
 .form-control input[type="checkbox"] {
     display: inline-block;
@@ -62,64 +62,67 @@ button and Checkbox */
     cursor: pointer;
   }
   
-  .animation {
-    animation-name: move;
-    animation-duration: .4s;
-    animation-fill-mode: both;
-    animation-delay: 2s;
-  }
-  
-  .a0 {
-    animation-delay: 1s;
+.animation {
+  /* Animation description */
+  animation-name: move;
+  animation-duration: .4s;
+  animation-fill-mode: both;
+  animation-delay: 2s;
+}
+
+/* Staggered animation delays for aesthetic effect */
+.a0 {
+  animation-delay: 1s;
+}
+
+.a1 {
+  animation-delay: 2s;
+}
+
+.a2 {
+  animation-delay: 2.1s;
+}
+
+.a3 {
+  animation-delay: 2.2s;
+}
+
+.a4 {
+  animation-delay: 2.3s;
+}
+
+.a5 {
+  animation-delay: 2.4s;
+}
+
+.a6 {
+  animation-delay: 2.5s;
+}
+
+/* Keyframes manipulation for animations */
+@keyframes move {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-40px);
   }
 
-  .a1 {
-    animation-delay: 2s;
+  100% {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
   }
-  
-  .a2 {
-    animation-delay: 2.1s;
-  }
-  
-  .a3 {
-    animation-delay: 2.2s;
-  }
-  
-  .a4 {
-    animation-delay: 2.3s;
-  }
-  
-  .a5 {
-    animation-delay: 2.4s;
-  }
-  
-  .a6 {
-    animation-delay: 2.5s;
+}
+
+@keyframes left {
+  0% {
+    opacity: 0;
+    width: 0;
   }
 
-  @keyframes move {
-    0% {
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-40px);
-    }
-  
-    100% {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
+  100% {
+    opacity: 1;
+    padding: 20px 40px;
+    width: 800px;
   }
-  
-  @keyframes left {
-    0% {
-      opacity: 0;
-      width: 0;
-    }
-  
-    100% {
-      opacity: 1;
-      padding: 20px 40px;
-      width: 800px;
-    }
-  }
+}
