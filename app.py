@@ -261,6 +261,9 @@ def find_friends():
         
         username = request.form.get("username")
 
+        if username == session["user_id"]:
+            return apology2("Bro... This is you, not a friend.", 403)
+
         if not username:
             return apology2("must provide username", 403)
         
@@ -288,7 +291,9 @@ def find_friends():
         else: 
             statement = "Sorry, none of the songs in the database matched your friend's most recent quiz results." 
 
-        return render_template("songs2.html", list1=list1, list2=list2, statement=statement, username=username)
+        list3 = db.execute("SELECT username FROM users")
+
+        return render_template("songs2.html", list1=list1, list2=list2, list3=list3, statement=statement, username=username)
             
     else: 
         return render_template("friends.html")
