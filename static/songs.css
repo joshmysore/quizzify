@@ -1,7 +1,8 @@
+/* Box sizing and url import for font */
 * { box-sizing: border-box; }
 @import url('https://fonts.googleapis.com/css?family=Rubik:400,500&display=swap');
 
-
+/* Body font and colors */
 body {
   background: linear-gradient(to right, #de48b5 0%,#0097ff 100%);
   background-color: #fff;
@@ -55,7 +56,7 @@ body {
   animation-delay: 1s;
 }
 
-
+/* All text styles */
 .header > h2 {
   margin: 0;
   color: #4f46a5;
@@ -75,13 +76,16 @@ body {
   color: rgba(0,0,0,.4);
 }
 
+
 .animation {
+  /* Animation description */
   animation-name: move;
   animation-duration: .4s;
   animation-fill-mode: both;
   animation-delay: 2s;
 }
 
+/* Staggered animation delays for aesthetic effect */
 .a1 {
   animation-delay: 2s;
 }
@@ -106,6 +110,7 @@ body {
   animation-delay: 2.5s;
 }
 
+/* Table autoincrement counter for song number */
 table {
   counter-reset: rowNumber - 1;
 }
@@ -120,6 +125,7 @@ table tr td:first-child::before {
   margin-right: 0.5em;
 }
 
+/* Keyframes manipulation for animations */
 @keyframes move {
   0% {
     opacity: 0;
