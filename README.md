@@ -36,3 +36,7 @@ For starters, we have four crucial tables: users, songs, recs, and tables_id. Th
 The main features include: registering; loggining in; completing the form and getting song recommendations; seeing one's own previous results; and being able to search up friends' usernames and find their results.
 
 Then, we have two python files: app.py and database.py. These run the application and the parsing of data. These files are explained in design.md.
+
+# YouTube Video
+
+See link here: https://youtu.be/8mOlGVfDiwA
