@@ -262,7 +262,7 @@ def find_friends():
         username = request.form.get("username")
 
         if not username:
-            return apology("must provide username", 403)
+            return apology2("must provide username", 403)
         
         # Query database for username
         rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
@@ -271,7 +271,7 @@ def find_friends():
         if len(rows) != 1:
             return apology2("The username you have inputed does not match with anyone who has registered for Quizzify", 403)
         
-        new_id = db.execute("SELECT user_id FROM users WHERE username = ?", username)
+        new_id = db.execute("SELECT user_id FROM users WHERE username = ?", username)[0]['user_id']
 
         list1 = db.execute("SELECT id, dance, energy, live, year, bpm FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", new_id)
 
