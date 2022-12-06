@@ -34,24 +34,19 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-# THIS IS WHERE EVERYTHING NEW BEGINS AND I DID NOT ALTER ANYTHING ABOVE FROM FINANCE
-
 # This registers a new user
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
-    print("TEST")
 
     if request.method == "POST":
+        
+        #gets the username, password, and confirmation from the form by requesting 
         username = request.form.get("username")
-        print(username)
         password = request.form.get("password")
-        print(password)
         confirmation = request.form.get("confirmation")
-        print(confirmation)
-        print("POST")
+        
         # checks of submitted username
-        # could I combine these three for design?
         if not username:
             return apology("must provide username")
 
@@ -66,8 +61,6 @@ def register():
         # checks if password and confirmation match
         if password != confirmation:
             return apology("Your password does not match the confirmation of your password")
-
-        print("confirmation")
 
         # checks if username already exists
         if len(db.execute("SELECT username FROM users WHERE username = ?", username)) > 0:
@@ -117,7 +110,6 @@ def login():
         # Remember which user has logged in
         session["user_id"] = rows[0]["user_id"]
         session["username"] = rows[0]["username"]
-        
 
         # Redirect user to home page
         return redirect("/")
@@ -137,12 +129,14 @@ def logout():
     # Redirect user to login form
     return redirect("/register")
 
+
 # This takes the user to the homepage where they see their recommended list of songs
 @app.route("/")
 @login_required
 def index():
     """Show the list of recommended songs to the user"""
 
+    # renders the user.html template as the homepage 
     return render_template("user.html", username=session["username"])
 
 
@@ -153,16 +147,24 @@ def display():
     
     user_id = session["user_id"]
     
+    # Gets the variables from the recommendation table where the user_id is that of the person who is logged in 
     list1 = db.execute("SELECT id, dance, energy, live, year, bpm FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", user_id)
     
+    # check's if the user has yet to fill out a form
     if len(list1) == 0:
         return apology2("You must fill out the form first in order to see any results", 403)
     
+    # gets the recommendation id specifically from the list1 query 
     recom_id = list1[0]["id"]   
     
+    # select all of our variables from the songs table where the song id is in the song id from the tables_id table 
+    # conducting a nested select here
     list2 = db.execute("SELECT title, artist, dance, energy, live, year, bpm FROM songs WHERE songid IN (SELECT songsid FROM tables_id WHERE user_id = ? AND recs_id = ? )", user_id, recom_id)
 
+    # provides an initialized empty statement
     statement = "" 
+    
+    # changes statement to present songs depending on whether there are songs that matched the users preferences in the list2 query. 
     if list2:
         statement = "Here are your songs."
     else: 
@@ -183,6 +185,7 @@ def form_fillout():
         
         
         # Step 1: Look up data from the form and conduct average calculations
+        # Initializes variables to 0 and creates a list with them  
         dance = 0
         energy = 0
         live = 0
@@ -191,23 +194,25 @@ def form_fillout():
 
         values = [dance, energy, live, year, bpm]
 
-        #2d array
+        # This creates a 2d array that is supposed to emulate a matrix and sets each row from the first column as the question number from the form 
+        # The array sets the corresponding values we will assign from the user's answer being 1-5.  
         # row1 -> ["numbers1", 40 , 50, 65, 80, 90] -> dance
         # row2 -> ["numbers2", 40 , 50, 65, 80, 90] -> dance
         # row3 -> ["numbers3", 40 , 50, 65, 80, 90] -> energy
         # row4 -> ["numbers4", 40 , 50, 65, 80, 90] -> energy
-        # ... 
+         
         arr = [["numbers1", 40, 50, 65, 80, 90], ["numbers2", 40, 50, 65, 80, 90], ["numbers3", 50, 60, 75, 85, 90], ["numbers4", 50, 60, 75, 85, 90], ["numbers5", 6, 13, 20, 28, 38], ["numbers6", 6, 13, 20, 28, 38],  ["numbers7", 2011, 2013, 2015, 2017, 2019], ["numbers8", 2011, 2013, 2015, 2017, 2019], ["numbers9", 70, 100, 125, 155, 185], ["numbers10", 70, 100, 125, 155, 185]]
         sum = 0
 
-
+        # iterates through each of the 10 questions
         for i in range(1,11):
+            # create a string variable that appends “numbers” to whatever number question the loop is on.
             string = "numbers" + str(i)
-            # CONDUCTS ERROR CHECKING FOR THE FORM ???
+            # CONDUCTS ERROR CHECKING FOR THE FORM 
             if not request.form.get(string):
                 return apology2("must provide answers to all of the questions", 403)
-            for j in range (1, 6):
-                # continues the for loop. 
+            # set the assigned value within the array to the user’s chosen value from the question
+            for j in range (1, 6): 
                 if int(request.form.get(string)) == j:
                     chosen_value = arr[i - 1][j]
                     sum += chosen_value
@@ -234,14 +239,17 @@ def form_fillout():
         boundBpmLower = values[4] - 10
 
         # Step 2: Go though the SQL database to see which songs fit into the range from the 5 variables
-        # 
 
+        # determine which songs fit into the range of all of the 5 variables obtained from the user’s quiz answer results
         result = db.execute("SELECT songid FROM songs WHERE dance < ? AND dance > ? AND energy < ? AND energy > ? AND live < ? AND live > ? AND year < ? AND year > ? AND bpm < ? AND bpm > ?", boundDanceUpper, boundDanceLower, boundEnergyUpper, boundEnergyLower, boundLiveUpper, boundLiveLower, boundYearUpper, boundYearLower, boundBpmUpper, boundBpmLower)
         
+        # inserts the user’s preferred listening variables from the quiz into the recs table
         db.execute("INSERT INTO recs (user_id, dance, energy, live, year, bpm) VALUES (?, ?, ?, ?, ?, ?)", user_id, values[0], values[1], values[2], values[3], values[4])
         
+        # get the specific recommendation id 
         rec_id = db.execute("SELECT id FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", user_id)[0]["id"]
 
+        # insert the user, song, and recommendation ids into another table called tables_id. Stores all of the ids needed for each query in the songs route
         for song in result: 
             db.execute("INSERT INTO tables_id (user_id, songsid, recs_id) VALUES (?, ?, ?)", user_id, song["songid"], rec_id)
             
@@ -259,11 +267,14 @@ def find_friends():
     
     if request.method == "POST":
         
+        # gets the username from the user's form input 
         username = request.form.get("username")
 
+        # checks if the username is not the current user's username 
         if username == session["user_id"]:
             return apology2("Bro... This is you, not a friend.", 403)
 
+        # checks if the user inputted a friend's username 
         if not username:
             return apology2("must provide username", 403)
         
@@ -274,8 +285,10 @@ def find_friends():
         if len(rows) != 1:
             return apology2("The username you have inputed does not match with anyone who has registered for Quizzify", 403)
         
+        # gets the specific user id that falls under the username 
         new_id = db.execute("SELECT user_id FROM users WHERE username = ?", username)[0]['user_id']
 
+        # Gets the variables from the recommendation table where the user_id is that of the person who is logged in 
         list1 = db.execute("SELECT id, dance, energy, live, year, bpm FROM recs WHERE user_id = ? ORDER BY id DESC LIMIT 1", new_id)
 
         if len(list1) == 0:
@@ -291,19 +304,13 @@ def find_friends():
         else: 
             statement = "Sorry, none of the songs in the database matched your friend's most recent quiz results." 
 
-        list3 = db.execute("SELECT username FROM users")
-
-        return render_template("songs2.html", list1=list1, list2=list2, list3=list3, statement=statement, username=username)
+        return render_template("songs2.html", list1=list1, list2=list2, statement=statement, username=username)
             
     else: 
         return render_template("friends.html")
 
 
-
-
-
-
-
+# Email feature. Took 5 hours to implement, TF said the code was correct, only problem is the GMAIL API verification takes too long and is super strict. 
 @app.route("/email")
 @login_required
 def send_email():
